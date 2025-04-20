@@ -1,0 +1,12 @@
+fastapi
+uvicorn
+httpx
+pydantic
+cachetools
+tenacity
+python-dotenv
+tenacity>=8.0.0
+pydantic_settings
+pytest
+pytest-dotenv
+pytest-asyncio

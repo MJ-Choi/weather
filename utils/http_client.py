@@ -30,5 +30,7 @@ class HTTPClient:
             response = await client.get(self.base_url, params=params)
             # change log level
             logger.info(f"[Weather API] Response: {response.text}")
-            response.raise_for_status()
-            return response.json()
+            if response.status_code == 200:
+                response.raise_for_status()
+                return response.json()
+            return

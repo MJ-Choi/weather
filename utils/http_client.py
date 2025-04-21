@@ -2,7 +2,7 @@ import httpx
 import random
 import logging
 from tenacity import retry, stop_after_attempt, wait_exponential
-from typing import Dict, Any
+from typing import Dict, Any, Coroutine
 
 logger = logging.getLogger(__name__)
 
@@ -23,7 +23,7 @@ class HTTPClient:
         stop=stop_after_attempt(3),
         wait=wait_exponential_with_jitter(multiplier=1, jitter_max=1.0)
     )
-    async def get(self, params: Dict[str, Any]) -> dict:
+    async def get(self, params: Dict[str, Any]) -> Any | None:
         params["appid"] = self.api_key
         logger.info(f"appid: {self.api_key}")
         async with httpx.AsyncClient() as client:
@@ -33,4 +33,5 @@ class HTTPClient:
             if response.status_code == 200:
                 response.raise_for_status()
                 return response.json()
-            return
+            else:
+                logger.warning(f"failed to get: {response.status_code}")
